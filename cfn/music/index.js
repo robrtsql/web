@@ -6,7 +6,12 @@ var creds = require('creds')
 const createResponse = (statusCode, body) => {
     return {
         statusCode: statusCode,
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-ALlow-Methods': 'GET,PUT,POST,DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        }
     }
 };
 
