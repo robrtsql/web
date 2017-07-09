@@ -7,19 +7,21 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {topTracks: []};
-    }
-
-    render() {
+        var thisComponent = this;
         axios.get('https://7zab8bf921.execute-api.us-east-1.amazonaws.com/Prod/music')
             .then(function (response) {
-                this.setState((prevState) => ({
-                    topTracks: response.data.toptracks.track
-                }));
-            })
+                thisComponent.setState((prevState) => ({
+                        topTracks: response.data.toptracks.track
+                    }));
+                }
+            )
             .catch(function (error) {
                 console.log(error);
             }
         );
+    }
+
+    render() {
         return (
             <div className="App">
                 <div className="App-header">
