@@ -2,15 +2,15 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Simple webservice.
 Resources:
-  GetFunction:
+  GetMusicFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.get
       Runtime: nodejs4.3
-      CodeUri: ./
+      CodeUri: ./music/
       Events:
         GetResource:
           Type: Api
           Properties:
-            Path: /resource/{resourceId}
+            Path: /music
             Method: get
