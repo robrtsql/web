@@ -1,7 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import logo from './logo.svg';
-import './App.css';
+
+class Track extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: props.originalTrack.name,
+            url: props.originalTrack.url
+        };
+    }
+
+    render() {
+        return <div className="entry" key={this.state.url}>{this.state.name}</div>;
+    }
+}
 
 class App extends Component {
     constructor(props) {
@@ -10,8 +22,11 @@ class App extends Component {
         var thisComponent = this;
         axios.get('https://7zab8bf921.execute-api.us-east-1.amazonaws.com/Prod/music')
             .then(function (response) {
+                var tracks = response.data.toptracks.track.map(function(track) {
+                    return new Track({originalTrack: track});
+                });
                 thisComponent.setState((prevState) => ({
-                        topTracks: response.data.toptracks.track
+                        topTracks: tracks
                     }));
                 }
             )
@@ -23,22 +38,14 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <h2>Welcome to React</h2>
-                </div>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.js</code> and save to reload.
-
-                </p>
-
-
-                <ul>
-                    {this.state.topTracks.map(function(track, i){
-                        return <li>{track.name}</li>;
-                    })}
-                </ul>
+            <div className="App container content">
+                <main>
+                    <div id="tlogs">
+                        {this.state.topTracks.map(function(track, i){
+                            return track.render();
+                        })}
+                    </div>
+                </main>
             </div>
         );
     }
