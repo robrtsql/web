@@ -1,11 +1,11 @@
 var creds = require('creds')
 
-var fs = require('fs');
 var cheerio = require('cheerio');
 var LastFmNode = require('lastfm').LastFmNode;
 var async = require('asyncawait/async');
 var await = require('asyncawait/await');
 var Promise = require('bluebird');
+var fs = Promise.promisifyAll(require('fs'));
 
 /* wrap lastfm because the package does not follow
  * callback standards and therefore cannot be
@@ -48,7 +48,7 @@ var createArtistRow = function($, i, artist) {
 };
 
 var buildIndex = async (function () {
-    var templateHtml = fs.readFileSync('./index.html', 'utf-8');
+    var templateHtml = await (fs.readFileAsync('./index.html', 'utf-8'));
     var $ = cheerio.load(templateHtml);
     var topArtists = await (getArtists())['topartists']['artist'];
     var artistsTable = $('#weekly-top-artists tbody');
@@ -58,7 +58,7 @@ var buildIndex = async (function () {
         artistsTable.append(createArtistRow($, i, topArtists[i]));
     }
 
-    console.log($.html());
+    await (fs.writeFileAsync('./dist/index.html', $.html(), 'utf-8'));
 });
 
 buildIndex()
