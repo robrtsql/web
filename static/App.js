@@ -9,7 +9,7 @@ var fs = Promise.promisifyAll(require('fs'));
 
 /* wrap lastfm because the package does not follow
  * callback standards and therefore cannot be
- * promisified as-is */ 
+ * promisified as-is */
 
 var getArtistsWithHandlers = function(callback) {
     var lastfm = new LastFmNode({
@@ -48,7 +48,7 @@ var createArtistRow = function($, i, artist) {
 };
 
 var buildIndex = async (function () {
-    var templateHtml = await (fs.readFileAsync('./index.html', 'utf-8'));
+    var templateHtml = await (fs.readFileAsync('/home/robrtsql/github.com/robrtsql/web/static/index.html', 'utf-8'));
     var $ = cheerio.load(templateHtml);
     var topArtists = await (getArtists())['topartists']['artist'];
     var artistsTable = $('#weekly-top-artists tbody');
@@ -58,9 +58,15 @@ var buildIndex = async (function () {
         artistsTable.append(createArtistRow($, i, topArtists[i]));
     }
 
-    await (fs.writeFileAsync('./dist/index.html', $.html(), 'utf-8'));
+    try {
+      await (fs.mkdirAsync('/home/robrtsql/github.com/robrtsql/web/static/dist/', '0775'));
+    } catch (error) {
+
+    }
+
+    await (fs.writeFileAsync('/home/robrtsql/github.com/robrtsql/web/static/dist/index.html', $.html(), 'utf-8'));
 });
 
 buildIndex()
-	.then (function () { })
-	.catch(function (err) { console.log('Err! : ' + err); });
+    .then (function () { })
+    .catch(function (err) { console.log('Err! : ' + err); });
