@@ -1,9 +1,7 @@
-var creds = require('creds')
+var creds = require('/home/robrtsql/creds');
 
 var cheerio = require('cheerio');
 var LastFmNode = require('lastfm').LastFmNode;
-var async = require('asyncawait/async');
-var await = require('asyncawait/await');
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
 
@@ -47,10 +45,10 @@ var createArtistRow = function($, i, artist) {
     return row;
 };
 
-var buildIndex = async (function () {
+var buildIndex = async () => {
     var templateHtml = await (fs.readFileAsync('/home/robrtsql/github.com/robrtsql/web/static/index.html', 'utf-8'));
     var $ = cheerio.load(templateHtml);
-    var topArtists = await (getArtists())['topartists']['artist'];
+    var topArtists = (await getArtists())['topartists']['artist'];
     var artistsTable = $('#weekly-top-artists tbody');
     artistsTable.empty();
 
@@ -59,13 +57,13 @@ var buildIndex = async (function () {
     }
 
     try {
-      await (fs.mkdirAsync('/home/robrtsql/github.com/robrtsql/web/static/dist/', '0775'));
+      await fs.mkdirAsync('/home/robrtsql/github.com/robrtsql/web/static/dist/', '0775');
     } catch (error) {
 
     }
 
     await (fs.writeFileAsync('/home/robrtsql/github.com/robrtsql/web/static/dist/index.html', $.html(), 'utf-8'));
-});
+};
 
 buildIndex()
     .then (function () { })
